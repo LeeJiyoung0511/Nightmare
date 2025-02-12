@@ -36,7 +36,7 @@
 
                 foreach (Item item in DataManager.Instance.HaveItems)
                 {
-                    Console.WriteLine(item.SelectItem());
+                    Console.WriteLine($" - {item.SelectItem()}");
                 }
 
                 Console.WriteLine();

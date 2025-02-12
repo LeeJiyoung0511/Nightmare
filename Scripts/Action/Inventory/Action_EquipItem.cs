@@ -24,29 +24,39 @@
 
             private void EquipItem(int num)
             {
+                if (num < 0 || num >= DataManager.Instance.HaveItems.Count)
+                {
+                    Console.WriteLine("잘못된 입력입니다.");
+                    return;
+                }
                 Item selectItem = DataManager.Instance.HaveItems[num];
-                //Stat equipStat;
 
-                if (selectItem.IsEquip)
+                if (selectItem != null)
                 {
-                    selectItem.IsEquip = false;
-
-                    if (selectItem.Type == ItemType.Weapon)
-                    {
-                        //equipStat.EquipAtk -= Item.item.Value;
-                    }
-                    //else equipStat.EquipDef -= item.Value;
+                    selectItem.Equip(num);  // Item 클래스의 Equip() 호출
                 }
-                else
-                {
-                    selectItem.IsEquip = true;
+               // DataManager.Instance.Item.Equip(num);
+                ////Stat equipStat;
 
-                    if (selectItem.Type == ItemType.Weapon)
-                    {
-                        //EquipAtk += item.Value;
-                    }
-                    //else EquipDef += item.Value;
-                }
+                //if (selectItem.IsEquip)
+                //{
+                //    selectItem.IsEquip = false;
+
+                //    if (selectItem.Type == ItemType.Weapon)
+                //    {
+                //        //equipStat.EquipAtk -= Item.item.Value;
+                //    }
+                //    //else equipStat.EquipDef -= item.Value;
+                //}
+                //else
+                //{
+                //    selectItem.IsEquip = true;
+
+                //    if (selectItem.Type == ItemType.Weapon)
+                //    {
+                //        //EquipAtk += item.Value;
+                //    }
+                //    //else EquipDef += item.Value;
             }
         }
     }

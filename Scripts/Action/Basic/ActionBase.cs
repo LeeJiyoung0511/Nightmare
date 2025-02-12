@@ -71,6 +71,7 @@
                     {
                         PrintErrorMessage(0);
                     }
+                    Thread.Sleep(800);
                 }
             }
 
