@@ -45,6 +45,7 @@ namespace Nightmare
 
         public void GameStart()
         {
+            SoundManager.PlayBGM("Intro");
 
             Player = new Player();
             Player.Level = new Level();
@@ -203,6 +204,7 @@ namespace Nightmare
                 Player.Job = JobChoice(number);
                 Skill skill = new Skill();
                 skill.SkillSet(Player);
+                SoundManager.PlayBGM("Main");
                 MoveNextAction(ActionType.Village);
             }
         }

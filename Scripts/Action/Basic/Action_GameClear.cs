@@ -17,6 +17,7 @@ namespace Nightmare
 
             public override void OnEnter()
             {
+                SoundManager.PlayBGM("HappyEnding");
                 Console.Clear();
                 //플레이한 직업 삭제
                 DataManager.Instance.CanSelectPlayerDatas.Remove((int)Instance.Player.Job);

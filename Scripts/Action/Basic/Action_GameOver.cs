@@ -18,6 +18,7 @@
 
             public override void OnEnter()
             {
+                SoundManager.PlayBGM("BadEnding");
                 Console.Clear();
                 //플레이한 직업 삭제
                 DisPlay();
