@@ -16,69 +16,67 @@
 
     public class ASCIIManager
     {
-        ///// <summary>
-        ///// 아스키 아트를 정렬하고 표시하는 함수
-        ///// </summary>
-        ///// <param name="fileName">아스키 아트 파일이름</param>
-        ///// <param name="hori">가로 정렬</param>
-        ///// <param name="verti">수직 정렬</param>
-        //static public void DisplayAlignASCIIArt(string fileName, Align hori, VerticalAlign verti)
-        //{
-        //    string path = GetFilePath(fileName);
-        //    string[] lines = File.ReadAllLines(path);
+        /// <summary>
+        /// 아스키 아트를 정렬하고 표시하는 함수
+        /// </summary>
+        /// <param name="fileName">아스키 아트 파일이름</param>
+        /// <param name="hori">가로 정렬</param>
+        /// <param name="verti">수직 정렬</param>
+        static public void DisplayAlignASCIIArt(string fileName, Align hori, VerticalAlign verti)
+        {
+            string path = GetFilePath(fileName);
+            string[] lines = File.ReadAllLines(path);
 
-        //    AlignText(lines, hori, verti);
-        //}
+            AlignASCIIText(lines, hori, verti);
+        }
 
-        ///// <summary>
-        ///// 텍스트 정렬 함수
-        ///// </summary>
-        ///// <param name="lines">정렬할 텍스트</param>
-        ///// <param name="hori">가로 정렬</param>
-        ///// <param name="verti">수직 정렬</param>
-        //static public void AlignText(string[] lines, Align hori, VerticalAlign verti)
-        //{
-        //    int consoleWidth = Console.WindowWidth;
-        //    int consoleHeight = Console.WindowHeight;
-        //    int textHeight = lines.Length;
+        /// <summary>
+        /// 텍스트 정렬 함수
+        /// </summary>
+        /// <param name="lines">정렬할 텍스트</param>
+        /// <param name="hori">가로 정렬</param>
+        /// <param name="verti">수직 정렬</param>
+        static public void AlignASCIIText(string[] lines, Align hori, VerticalAlign verti)
+        {
+            Console.OutputEncoding = System.Text.Encoding.UTF8;
 
-        //    // ✅ 콘솔을 초과하지 않도록 안전한 Y 위치 계산
-        //    int startY = verti switch
-        //    {
-        //        VerticalAlign.Middle => Math.Max((consoleHeight - textHeight) / 2, 0),
-        //        VerticalAlign.Bottom => Math.Max(consoleHeight - textHeight - 1, 0),
-        //        _ => 0
-        //    };
+            int consoleWidth = Console.WindowWidth;
+            int consoleHeight = Console.WindowHeight;
+            int textHeight = lines.Length;
 
-            
+            int startY = verti switch
+            {
+                VerticalAlign.Middle => Math.Max((consoleHeight - textHeight) / 2, 0),
+                VerticalAlign.Bottom => Math.Max(consoleHeight - textHeight - 1, 0),
+                _ => 0
+            };
 
-        //    // ✅ 텍스트가 콘솔을 초과하지 않도록 보정
-        //    if (startY + textHeight >= consoleHeight)
-        //    {
-        //        startY = Math.Max(consoleHeight - textHeight, 0);  // 🔥 콘솔을 넘지 않도록 보정
-        //    }
+            if (startY + textHeight >= consoleHeight)
+            {
+                startY = Math.Max(consoleHeight - textHeight, 0);
+            }
 
-        //    Console.SetCursorPosition(0, startY);
+            Console.SetCursorPosition(0, startY);
 
-        //    foreach (string line in lines)
-        //    {
-        //        int padding = hori switch
-        //        {
-        //            Align.Center => (consoleWidth - line.Length) / 2,
-        //            Align.Right => consoleWidth - line.Length,
-        //            _ => 0
-        //        };
+            foreach (string line in lines)
+            {
+                int padding = hori switch
+                {
+                    Align.Center => (consoleWidth - line.Length) / 2,
+                    Align.Right => consoleWidth - line.Length,
+                    _ => 0
+                };
 
-        //        Console.WriteLine(new string(' ', padding) + line);
-        //    }
-        //}
+                Console.WriteLine(new string(' ', padding) + line);
+            }
+        }
 
         static public void DisplayAlignASCIIArt(string[] art, Align horizontalAlign, VerticalAlign verticalAlign)
         {
-            AlignText(art, horizontalAlign, verticalAlign, 0);
+            AlignASCIIText(art, horizontalAlign, verticalAlign, 0);
         }
 
-        static public void AlignText(string[] text, Align horizontalAlign, VerticalAlign verticalAlign, int reservedHeight)
+        static public void AlignASCIIText(string[] text, Align horizontalAlign, VerticalAlign verticalAlign, int reservedHeight)
         {
             Console.OutputEncoding = System.Text.Encoding.UTF8;
 
@@ -86,11 +84,9 @@
             int consoleHeight = Console.WindowHeight;
             int textHeight = text.Length;
 
-            // ✅ 콘솔 창을 벗어나지 않도록 Y 위치 보정
             int startY = (verticalAlign == VerticalAlign.Middle) ? (consoleHeight - textHeight) / 2 :
-                         (verticalAlign == VerticalAlign.Bottom) ? Math.Max(consoleHeight - textHeight - 1,0) : 0;
+                         (verticalAlign == VerticalAlign.Bottom) ? Math.Max(consoleHeight - textHeight - 1, 0) : 0;
 
-            //Console.SetCursorPosition(0, startY);
 
             foreach (string line in text)
             {
@@ -101,6 +97,32 @@
             }
         }
 
+        static public void AlignText(string[] text, Align horizontalAlign, VerticalAlign verticalAlign, int y = 8)
+        {
+            int textHeight = text.Length;
+            int consoleWidth = Console.WindowWidth;
+            int consoleHeight = Console.WindowHeight;
+
+            int startY = (verticalAlign == VerticalAlign.Middle) ? (consoleHeight - textHeight) / 2 :
+                         (verticalAlign == VerticalAlign.Bottom) ? Math.Max(consoleHeight - textHeight - 1, 0) : 0;
+
+            Console.SetCursorPosition(0, startY - y);
+
+            foreach (string line in text)
+            {
+                int textWidth = GetTextWidth(line);
+
+                int padding = (horizontalAlign == Align.Center) ? (consoleWidth - textWidth) / 2 :
+                              (horizontalAlign == Align.Right) ? (consoleWidth - textWidth) : 0;
+
+                Console.WriteLine(new string(' ', Math.Max(padding, 0)) + line);
+            }
+        }
+
+        static int GetTextWidth(string text)
+        {
+            return text.Sum(c => (c >= '가' && c <= '힣') ? 2 : 1);
+        }
 
         public static string[] Getlines(string fileName)
         {

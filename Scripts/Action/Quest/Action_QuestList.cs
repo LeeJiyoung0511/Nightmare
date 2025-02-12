@@ -32,21 +32,27 @@
             {
                 Console.Clear();
                 DisPlay();
-                UtilityManager.InputNumberInRange(0, quests.Count, SelectQuest,null,"원하시는 퀘스트를 입력해주세요");
+                UtilityManager.InputNumberInRange(0, quests.Count, SelectQuest, null, "");
             }
 
             protected override void DisPlay()
             {
-                Console.WriteLine("퀘스트");
+                ASCIIManager.DisplayAlignASCIIArt("Glasses", Align.Center, VerticalAlign.Top);
+
+                var questTexts = new List<string>();
+                questTexts.Add("[퀘스트]");
 
                 for (int i = 0; i < quests.Count; i++)
                 {
                     questDic.Add(i + 1, quests[i]);
                     quests[i].Id = i + 1;
-                    questDic[i+1].DisplayQuestTitle();
+                    questTexts.Add($"{questDic[i + 1].GetQuestTitle()}");
                 }
+                
+                questTexts.Add("0. 나가기");
+                questTexts.Add("원하시는 퀘스트를 입력해주세요");
 
-                Console.WriteLine("\n0. 나가기");
+                ASCIIManager.AlignText(questTexts.ToArray(), Align.Center, VerticalAlign.Bottom,3);
             }
 
             private void SelectQuest(int num)
@@ -97,7 +103,7 @@
                     if (selectedQuest.IsProgress)
                     {
                         if (selectedQuest.Condition.IsConditionClear)
-                        {    
+                        {
                             //보상받기
                             selectedQuest.ReceiveReward();
                             //완료한 퀘스트는 표시되지않게 리스트에서 삭제

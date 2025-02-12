@@ -27,6 +27,8 @@ namespace Nightmare
 
             protected override void DisPlay()
             {
+                ASCIIManager.DisplayAlignASCIIArt("Heart", Align.Center, VerticalAlign.Top);
+
                 var quest = DataManager.Instance.QuestDatas.FirstOrDefault(x => x.QuestGroupId == Instance.Player.QuestGroupId);
 
                 if (quest == null)
@@ -34,20 +36,31 @@ namespace Nightmare
                     Console.WriteLine("퀘스트를 찾을수 없습니다");
                 }
 
-                var lines = new List<string>();
-                lines.Add($"{Instance.name}은(는) 끝내 쓰러지고,");
-                lines.Add("당신은 이야기를 원래대로 돌려놓는 데에 성공했습니다.");
-                lines.Add($"{quest.Title}클리어.");
-                lines.Add("-보상-");
+                var clearTexts = new List<string>();
+                clearTexts.Add($"{Instance.name}은(는) 끝내 쓰러지고,");
+                clearTexts.Add("당신은 이야기를 원래대로 돌려놓는 데에 성공했습니다.");
+                clearTexts.Add($"{quest.Title}클리어.");
+                clearTexts.Add("-보상-");
 
                 foreach (var reward in quest.Rewards)
                 {
                     reward.ReceiveReward();
-                    lines.Add($"{reward.GetRewardInfo()} ");
+                    clearTexts.Add($"{reward.GetRewardInfo()} ");
                 }
 
-                //ASCIIManager.AlignText(lines, Align.Center, VerticalAlign.Bottom, 130);
-                UtilityManager.InputNumberInRange(1, 2, ReStart, null, "다른동화를 읽어 보시겠습니까? 1. 네 2. 아니오");
+                ASCIIManager.AlignText(clearTexts.ToArray(), Align.Center, VerticalAlign.Bottom);
+
+                Thread.Sleep(5000);
+                Console.Clear();
+
+                var endTexts = new List<string>();
+                endTexts.Add("Happily Ever After");
+                endTexts.Add("다른동화를 읽어 보시겠습니까?");
+                endTexts.Add("1. 네");
+                endTexts.Add("2. 아니오");
+
+                ASCIIManager.AlignText(endTexts.ToArray(), Align.Center, VerticalAlign.Middle);
+                UtilityManager.InputNumberInRange(1, 2, ReStart, null, "");
             }
 
             private void ReStart(int num)

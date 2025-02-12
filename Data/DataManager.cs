@@ -241,14 +241,8 @@ namespace Nightmare
 
         public void DataReset()
         {
-            // 가지고 있는 아이템 중에 하트조각이외에 아이템은 삭제
-            foreach (var item in HaveItems)
-            {
-                if (item.Type != ItemType.HeartPiece)
-                {
-                    HaveItems.Remove(item);
-                }
-            }
+            // 가지고 있는 아이템 중에 하트조각과 스페셜 아이템 이외에 아이템은 삭제
+            HaveItems.RemoveAll(x => x.Type == ItemType.HeartPiece && x.Type == ItemType.Special);
 
             // 장착된 아이템 삭제
             EquippedItems.Clear();
