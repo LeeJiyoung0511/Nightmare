@@ -16,9 +16,14 @@
                     { 0,  new Action_Return(0) },
                 };
             }
-
+            protected void PrintErrorMsg(int num)
+            {
+                UtilityManager.PrintErrorMessage();
+            }
             protected override void DisPlay()
             {
+                OnInputInvalidActionNumber = PrintErrorMsg;
+                Console.Clear();
                 Console.WriteLine("인벤토리");
                 DisPlayInventory();
             }
@@ -33,17 +38,15 @@
 
                 Console.WriteLine();
                 Console.WriteLine("[아이템 목록]");
-
+                int i = 1;
                 foreach (Item item in DataManager.Instance.HaveItems)
                 {
-                    Console.WriteLine($" - {item.SelectItem()}");
+                    Console.WriteLine($" - {i}. {item.SelectItem()}");
+                    i++;
                 }
 
                 Console.WriteLine();
             }
-
-            //Equip();
-            //UnEquip();
         }
     }
 }

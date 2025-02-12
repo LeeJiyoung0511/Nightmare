@@ -21,24 +21,24 @@
             private void PrintErrorMsg(int number)
             {
 
-                int index = number - 1;
-                if (index < 0 || index >= DataManager.Instance.PortionDatas.Count)
+                if (number >= 0 && number < 2)
                 {
-                    Console.WriteLine("잘못된 입력입니다.");
-                    return;
+                    var selectPortion = DataManager.Instance.PortionDatas[number-1];
+                    selectPortion.OnUsePotionEvent = DisPlay;
+
+                    selectPortion.UsePotion();
                 }
-                var selectPortion = DataManager.Instance.PortionDatas[index];
-                selectPortion.OnUsePotionEvent = DisPlay;
-
-                selectPortion.UsePotion();
-
-
+                else
+                {
+                    UtilityManager.PrintErrorMessage();
+                }
             }
 
             protected override void DisPlay()
             {
-                Console.Clear();
                 OnInputInvalidActionNumber = PrintErrorMsg;
+                Console.Clear();
+
                 Console.WriteLine("회복");
                 Console.WriteLine("포션을 사용하여 HP나 MP를 회복할 수 있습니다.");
 
