@@ -20,14 +20,16 @@ namespace Nightmare
         {
             Console.WriteLine($"Lv. {Level.PlayerLevel}");
             Console.WriteLine($"{Name} ( {UtilityManager.GetDescription(Job)} )");
-            string str = Stat.EquipAtk == 0 ? $"공격력 : {Stat.BaseAtk}" : $"공격력 : {Stat.BaseAtk + Stat.EquipAtk} (+{Stat.EquipAtk})";
+            string str = Stat.EquipAtk == 0 ? $"공격력 : {Stat.BaseAtk}" : $"공격력 : {Stat.BaseAtk + Stat.EquipAtk} ( +{Stat.EquipAtk} )";
             Console.WriteLine(str);
-            str = Stat.EquipDef == 0 ? $"방어력 : {Stat.BaseDef}" : $"방어력 : {Stat.BaseDef + Stat.EquipDef} (+{Stat.EquipDef})";
+            str = Stat.EquipDef == 0 ? $"방어력 : {Stat.BaseDef}" : $"방어력 : {Stat.BaseDef + Stat.EquipDef} ( +{Stat.EquipDef} )";
             Console.WriteLine(str);
             Console.WriteLine($"체력 : {Stat.Hp} / {Stat.MaxHp}");
             Console.WriteLine($"마력 : {Stat.Mp} / {Stat.MaxMp}");
-            Console.WriteLine($"회피율: {Math.Round((Avd.EquipAvd + Avd.PlayerAvd) * 100),0} %");
-            Console.WriteLine($"치명타율 : {Math.Round((Crt.PlayerCrt + Crt.EquipCrt) * 100),0} %");
+            string str1 = Avd.EquipAvd == 0 ? $"회피율 : {Math.Round((Avd.PlayerAvd) * 100),0} %" : $"회피율: {Math.Round((Avd.EquipAvd + Avd.PlayerAvd) * 100),0} % ( +{Math.Round(Avd.EquipAvd * 100, 0)} % )";
+            Console.WriteLine(str1);
+            string str2 = Crt.EquipCrt == 0 ? $"치명타율 : {Math.Round((Crt.PlayerCrt) * 100),0} %" : $"치명타율: {Math.Round((Crt.EquipCrt + Crt.PlayerCrt) * 100),0} % ( +{Math.Round(Crt.EquipCrt * 100, 0)} % )";
+            Console.WriteLine(str2);
             Console.WriteLine($"Gold : {Gold.PlayerGold} G");
         }
 
