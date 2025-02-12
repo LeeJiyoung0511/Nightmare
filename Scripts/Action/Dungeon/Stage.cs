@@ -450,7 +450,7 @@
                         }
                         if (player.Playerskill[str - 1].SkillMp > player.Stat.Mp)
                         {
-                            Console.WriteLine($"마나가  {player.Playerskill[str - 1].SkillMp - player.Stat.Mp}가 부족합니다");
+                            Console.WriteLine($"마나가 {player.Playerskill[str - 1].SkillMp - player.Stat.Mp} 부족합니다");
                             BattlePhase(mon, monsters, player);
                             continue;
                         }

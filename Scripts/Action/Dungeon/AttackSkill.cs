@@ -29,9 +29,9 @@ namespace Nightmare
                     }
                     else
                     {
+                        player.Stat.Mp -= SkillMp;
                         foreach (Monster monster1 in monster) // 다중 공격형 스킬
-                        {
-                            player.Stat.Mp -= SkillMp;
+                        {                            
                             monster1.MonsterHealth -= SkillDamage;
                             Console.WriteLine($"{SkillName}로 {monster1.Name}에게 {(int)(player.Stat.BaseAtk + player.Stat.EquipAtk) * 1.5f}의 피해를 입혔습니다.");
                             monster1.MonsterDIe(ref D);
