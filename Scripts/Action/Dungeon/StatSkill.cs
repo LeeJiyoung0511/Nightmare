@@ -134,8 +134,6 @@ namespace Nightmare
                     {
                         if (SkillType.Equals("공격력"))
                         {
-
-
                             player.Stat.BaseAtk -= (int)SkillDamage;
                             Instance.deBuffedplayer.Add(((Player player, int remainingTurns, string doco, int howmany))(player, SkillInTime, SkillType, SkillDamage));
                             Console.WriteLine($"{SkillName}(으)로 {player.Name}의 공격력이 {SkillDamage}만큼 내렸습니다.");
@@ -145,6 +143,23 @@ namespace Nightmare
                             player.Stat.BaseDef -= (int)SkillDamage;
                             Instance.deBuffedplayer.Add(((Player player, int remainingTurns, string doco, int howmany))(player, SkillInTime, SkillType, SkillDamage));
                             Console.WriteLine($"{SkillName}(으)로 {player.Name}의 방어력이 {SkillDamage}만큼 내렸습니다.");
+                        }
+                        else if (SkillType.Equals("회피율"))
+                        {
+                            player.Avd.PlayerAvd -= (int)SkillDamage;
+                            Instance.deBuffedplayer.Add(((Player player, int remainingTurns, string doco, int howmany))(player, SkillInTime, SkillType, SkillDamage));
+                            Console.WriteLine($"{SkillName}(으)로 {player.Name}의 회피율이 {SkillDamage}만큼 내렸습니다.");
+                        }
+                        else if (SkillType.Equals("치명타율"))
+                        {
+                            player.Crt.PlayerCrt -= (int)SkillDamage;
+                            Instance.deBuffedplayer.Add(((Player player, int remainingTurns, string doco, int howmany))(player, SkillInTime, SkillType, SkillDamage));
+                            Console.WriteLine($"{SkillName}(으)로 {player.Name}의 치명타율이 {SkillDamage}만큼 내렸습니다.");
+                        }
+                        else if (SkillType.Equals("마력"))
+                        {
+                            player.Stat.Mp -= (int)SkillDamage;
+                            Console.WriteLine($"{SkillName}(으)로 {player.Name}의 마력이 {SkillDamage}만큼 내렸습니다.");
                         }
                     }
                 }

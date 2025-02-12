@@ -6,6 +6,11 @@ namespace Nightmare
     {
         public class AttackSkill : Skill
         {
+            public  int HowManyAttack {  get; set; } 
+            public AttackSkill(string n, float damage, int t, int m, int cooltime, int st, int whos, int howManyAttack) : base(n, damage, t, m, cooltime, st, whos)
+            {
+                HowManyAttack = howManyAttack;
+            }
             public override string ToString()
             {
                 StringBuilder sb = new StringBuilder();
@@ -23,33 +28,40 @@ namespace Nightmare
                         Console.WriteLine("어떤 적을 공격하십니까");
                         int num = int.Parse(Console.ReadLine());
                         player.Stat.Mp -= SkillMp;
-                        monster[num - 1].MonsterHealth -= SkillDamage;
-                        Console.WriteLine($"{SkillName}로 {monster[num - 1].Name}에게 {(int)(player.Stat.BaseAtk + player.Stat.EquipAtk) * 2}의 피해를 입혔습니다.");
-                        monster[num - 1].MonsterDIe(ref D);
+                        for (int i = 0; i < HowManyAttack; i++)
+                        {
+                            monster[num - 1].MonsterHealth -= SkillDamage;
+                            Console.WriteLine($"{SkillName}로 {monster[num - 1].Name}에게 {(int)(player.Stat.BaseAtk + player.Stat.EquipAtk) * 2}의 피해를 입혔습니다.");
+                            monster[num - 1].MonsterDIe(ref D);
+                        }
                     }
                     else
                     {
                         player.Stat.Mp -= SkillMp;
                         foreach (Monster monster1 in monster) // 다중 공격형 스킬
-                        {                            
-                            monster1.MonsterHealth -= SkillDamage;
-                            Console.WriteLine($"{SkillName}로 {monster1.Name}에게 {(int)(player.Stat.BaseAtk + player.Stat.EquipAtk) * 1.5f}의 피해를 입혔습니다.");
-                            monster1.MonsterDIe(ref D);
+                        {
+                            player.Stat.Mp -= SkillMp;
+                            for (int i = 0; i < HowManyAttack; i++)
+                            {
+                                monster1.MonsterHealth -= SkillDamage;
+                                Console.WriteLine($"{SkillName}로 {monster1.Name}에게 {(int)(player.Stat.BaseAtk + player.Stat.EquipAtk) * 1.5f}의 피해를 입혔습니다.");
+                                monster1.MonsterDIe(ref D);
+                            }
                         }
                     }
                 }
                 else
                 {
-                    player.Stat.Hp -= SkillDamage;
-                    Console.WriteLine($"{SkillName}로 {player.Name}에게 {SkillDamage}의 피해를 입혔습니다.");
+                    for (int i = 0; i < HowManyAttack; i++)
+                    {
+                        player.Stat.Hp -= SkillDamage;
+                        Console.WriteLine($"{SkillName}로 {player.Name}에게 {SkillDamage}의 피해를 입혔습니다.");
+                    }
                    
                 }
             }
 
-            public AttackSkill(string n, float damage, int t, int m, int cooltime, int st, int whos) : base(n, damage, t, m, cooltime, st, whos)
-            {
-
-            }
+ 
         }
     }
 }

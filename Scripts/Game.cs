@@ -10,12 +10,14 @@ namespace Nightmare
             // 게임 강제 종료시에도 게임 저장
             AppDomain.CurrentDomain.ProcessExit += GameManager.Instance.GameSave;
 
+
             SoundManager.PlayBGM("Intro");
 
             Console.SetWindowSize(120, 40);
             //var titlelines = ASCIIManager.Getlines("Title");
             //var booklines = ASCIIManager.Getlines("Book");
             //var posterlines = ASCIIManager.Getlines("Poster");
+
 
             //ASCIIManager.DisplayAlignASCIIArt(titlelines, Align.Center, VerticalAlign.Top);
             //ASCIIManager.DisplayAlignASCIIArt(booklines, Align.Center, VerticalAlign.Middle);

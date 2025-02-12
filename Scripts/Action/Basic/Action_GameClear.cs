@@ -54,13 +54,13 @@ namespace Nightmare
                 Thread.Sleep(5000);
                 Console.Clear();
 
+                ASCIIManager.DisplayAlignASCIIArt("HappyEnd", Align.Center, VerticalAlign.Top);
                 var endTexts = new List<string>();
-                endTexts.Add("Happily Ever After");
                 endTexts.Add("다른동화를 읽어 보시겠습니까?");
                 endTexts.Add("1. 네");
                 endTexts.Add("2. 아니오");
 
-                ASCIIManager.AlignText(endTexts.ToArray(), Align.Center, VerticalAlign.Middle);
+                ASCIIManager.AlignText(endTexts.ToArray(), Align.Center, VerticalAlign.Bottom,15);
                 UtilityManager.InputNumberInRange(1, 2, ReStart, null, "");
             }
 

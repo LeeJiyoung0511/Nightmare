@@ -19,6 +19,7 @@
                     { 5,  new Action_QuestList(5) },
                     { 6,  new Action_GameClear(6) }, //디버깅
                     { 7,  new Action_GameOver(7) }, //디버깅
+
                 };
             }
 

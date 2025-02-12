@@ -26,6 +26,7 @@
             {
                 OnInputInvalidActionNumber = PrintErrorMessage;
                 Console.Clear();
+
                 var Weaponlines = ASCIIManager.Getlines("Weapon");
 
                 ASCIIManager.DisplayAlignASCIIArt(Weaponlines, Align.Center, VerticalAlign.Top);

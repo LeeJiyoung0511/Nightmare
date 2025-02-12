@@ -74,9 +74,9 @@ namespace Nightmare
                     { ActionType.Sell, new Action_Sell(0) },
                     { ActionType.QuestList,  new Action_QuestList(0) },
                     { ActionType.RecoveryItem, new Action_RecoveryItem(0) },
-                    { ActionType.Recovery, new Action_Recovery(0) },
                     { ActionType.GameClear, new Action_GameClear(0) },
                     { ActionType.GameOver, new Action_GameClear(0) }
+
                 };
         }
 

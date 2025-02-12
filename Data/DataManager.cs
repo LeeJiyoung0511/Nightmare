@@ -207,18 +207,58 @@ namespace Nightmare
 
 
         //소모성 아이템(전투 중 볼 수 있는 인벤토리) 리스트(포션 3종+스페셜 드랍아이템 5종)
-        public List<Item> ConsumableItems = new();
         
-        
+
+        public List<Potion> HealthConsumableItems = new();
+        public List<Potion> ManaConsumableItems = new();
+        public List<Potion> LoveConsumableItems = new();
+        public List<Item> BossConsumableItems = new();
+
+
         //보스 처치시 필요한 필수 아이템 데이터
         public Dictionary<long, KillBossItem> KillBossItemDatas = new();
 
-        //장착된 아이템 리스트
+
+        //기본 포션 3개씩 추가하는 함수
+        public void InitializeConsumableItems()
+        {
+
+            for (int i = 0; i < 3; i++)
+            {
+                Potion potion = new Potion()
+                {
+                    Id = 18,
+                    Type = (ItemType)5,
+                    Name = "앨리스의 쿠키",
+                    Value = 20,
+                    Desc = "Eat Me! 라는 꼬리표가 달려있다.", //임의값
+                };
+                DataManager.Instance.HealthConsumableItems.Add(potion);
+
+            }
+            for (int i = 0; i < 3; i++)
+            {
+                Potion potion = new Potion()
+                {
+                    Id = 24,
+                    Type = (ItemType)6,
+                    Name = "앨리스의 음료",
+                    Value = 10,
+                    Desc = "Drink Me! 라는 꼬리표가 달려있다.", //임의값
+                };
+                DataManager.Instance.ManaConsumableItems.Add(potion);
+            }
+        }
+
+
+
+
+
         public List<Item> EquippedItems = new();
 
         public List<Potion> PortionDatas = new()
         {
-            
+
             new Potion()
             {
                 PotionId = 18,

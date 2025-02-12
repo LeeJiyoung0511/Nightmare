@@ -1,4 +1,6 @@
-﻿namespace Nightmare
+﻿using System;
+
+namespace Nightmare
 {
     public partial class GameManager
     {
@@ -173,6 +175,7 @@
             ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
             public void BattlePhase(Monster mon, List<Monster> monsters, Player player)
             {
+
                 var bgmName = "";
 
                 switch(MoneyRange)
@@ -189,6 +192,7 @@
                 }
 
                 SoundManager.PlayBGM(bgmName);
+
 
                 int ii = 1;
                 int DeathCount = 0;
@@ -345,10 +349,12 @@
                         }
                         else if (i == 2)
                         {
+                            Console.WriteLine("0. 돌아가기");
                             Console.WriteLine("어느 적을 공격할거니");
                         }
                         else if (i == 3)
                         {
+                            Console.WriteLine("0. 돌아가기");
                             Console.WriteLine("사용할 스킬을 골라주세요");
                         }
                         else
@@ -378,29 +384,64 @@
                     AllMoney += m.MonsterMoney;
                 }
 
-                Console.WriteLine($"{AllMoney}Gold 획득! 총 골드 {player.Gold.PlayerGold}");
+                Console.WriteLine($"{AllMoney}Gold 획득! 총 골드 {player.Gold.PlayerGold} Gold");
 
-                if (RandomRange > 1 || random.Next(0, 11) > 5)
+                if (this.RandomRange > 0 && random.Next(0, 11) > 5)
                 {
-                    Potion Healthportion = new Potion
+                    if (random.Next(0, 11) % 2 == 0)
                     {
-                        PotionId = 18
-                    };
-                    Healthportion.PickUpPotion(Healthportion);
+                        
+                        if(DataManager.Instance.ManaConsumableItems.Count >=3)
+                        {
+                            Console.WriteLine("가방이 꽉 찼습니다.");
+                        }
+                        else
+                        {
+                            Potion potion = new Potion()
+                            {
+                                Id = 18,
+                                Type = (ItemType)5,
+                                Name = "앨리스의 쿠키",
+                                Value = 20,
+                                Desc = "Eat Me! 라는 꼬리표가 달려있다.", //임의값
+                            };
+                            DataManager.Instance.ManaConsumableItems.Add(potion);
+                            Console.WriteLine($"앨리스의 쿠키 획득! ");
+                        }
+                    
+                    }
+                    if (random.Next(0, 11) % 2 == 1)
+                    {
 
-                    Potion manaportion = new Potion
+                        if (DataManager.Instance.ManaConsumableItems.Count >= 3)
+                        {
+                            Console.WriteLine("가방이 꽉 찼습니다.");
+                        }
+                        else
+                        {
+                            Potion potion = new Potion()
+                            {
+                                Id = 24,
+                                Type = (ItemType)6,
+                                Name = "앨리스의 음료",
+                                Value = 10,
+                                Desc = "Drink Me! 라는 꼬리표가 달려있다.", //임의값
+                            };
+                            DataManager.Instance.ManaConsumableItems.Add(potion);
+                            Console.WriteLine($"앨리스의 음료 획득! ");
+                        }
+                    }
+                    if (IsFinal && random.Next(0, 11) > -1)
                     {
-                        PotionId = 24
-                    };
-                    manaportion.PickUpPotion(manaportion);
-                    if (IsFinal || random.Next(0, 11) > 5)
-                    {
-                        KillBossItem killBoss = new KillBossItem();
+                        
                         Item item = new Item();
 
                         item = DataManager.Instance.ItemDatas[18 + (int)player.Job];
+                        Console.WriteLine($"{item.Name} 획득! 보스에게로 향할 수 있습니다. ");
+                        DataManager.Instance.BossConsumableItems.Add(item);
 
-                        killBoss.PickUpItem(item);
+
+                        //killBoss.PickUpItem(item);
                     }
                 }
 
@@ -431,7 +472,13 @@
                         else if (!monsters[AttackSelect - 1].IsLive)
                         {
                             Console.WriteLine("이미 죽었습니다.");
-                            continue;
+                            PlayerAction(monsters, player, mon, ref DeathCount);
+                            return;
+                        }
+                        else if (AttackSelect == 0)
+                        {
+                            PlayerAction(monsters, player, mon, ref DeathCount);
+                            return;
                         }
                         else
                         {
@@ -460,22 +507,27 @@
                     while (true)
                     {
                         int str = InputandReturn(3);
-                        if (str > player.Playerskill.Count || str == 0)
+                        if (str > player.Playerskill.Count || str < 0)
                         {
                             UtilityManager.PrintErrorMessage();
                             continue;
                         }
-                        if (player.Playerskill[str - 1].SkillMp > player.Stat.Mp)
+                        else if (player.Playerskill[str - 1].SkillMp > player.Stat.Mp)
                         {
-                            Console.WriteLine($"마나가 {player.Playerskill[str - 1].SkillMp - player.Stat.Mp} 부족합니다");
-                            BattlePhase(mon, monsters, player);
-                            continue;
+                            Console.WriteLine($"마나가  {player.Playerskill[str - 1].SkillMp - player.Stat.Mp}가 부족합니다");
+                            PlayerAction(monsters, player, mon, ref DeathCount);
+                            return;
                         }
-                        if (player.Playerskill[str - 1].CurrentCoolTime < player.Playerskill[str - 1].SkillCoolTime)
+                        else if (player.Playerskill[str - 1].CurrentCoolTime < player.Playerskill[str - 1].SkillCoolTime)
                         {
                             Console.WriteLine("쿨타임입니다.");
-                            BattlePhase(mon, monsters, player);
-                            continue;
+                            PlayerAction(monsters, player, mon, ref DeathCount);
+                            return;
+                        }
+                        else if (str == 0)
+                        {
+                            PlayerAction(monsters, player, mon, ref DeathCount);
+                            return;
                         }
 
                         foreach (Skill skill in player.Playerskill)
@@ -493,47 +545,164 @@
                 }
                 else if (Select == 3)
                 {
-                    List<Item> usableItems = new List<Item>();
-
-                    usableItems.AddRange(DataManager.Instance.ConsumableItems.OfType<Potion>());
-                    usableItems.AddRange(DataManager.Instance.ConsumableItems.OfType<KillBossItem>());
-
-                    if (usableItems.Count == 0)
-                    {
-                        Console.WriteLine("사용할 수 있는 아이템이 없습니다!");
-                        return;
-                    }
-
-                   
-                    Console.WriteLine("사용할 아이템을 선택하세요:");
-                    for (int i = 0; i < usableItems.Count; i++)
-                    {
-                        Console.WriteLine($"{i + 1}. {usableItems[i].showItem()}");
-                    }
-
-                    int choice;
                     while (true)
                     {
+                        bool Isboss = false;
+                        if (monsters[0] is Boss)
+                        {
+                            Isboss = true;
+                        }
+
+                        int hecount = DataManager.Instance.HealthConsumableItems.Count();
+                        int manacount = DataManager.Instance.ManaConsumableItems.Count();
+                        int lovecount = DataManager.Instance.LoveConsumableItems.Count();
+                        int Bosscount = DataManager.Instance.BossConsumableItems.Count();
+
+                        int number = 1;
+                        Console.Write("0. 돌아가기\n");
+
+
+                        if (hecount != 0)
+                        {
+                            foreach (Potion potion in DataManager.Instance.HealthConsumableItems)
+                            {
+                                Console.WriteLine($"{number}. {potion.ToShow()}");
+                                number++;
+                            }
+                        }
+                        if (manacount != 0)
+                        {
+                            foreach (Potion potion in DataManager.Instance.ManaConsumableItems)
+                            {
+                                Console.WriteLine($"{number}. {potion.ToShow()}");
+                                number++;
+                            }
+                        }
+                        if(lovecount != 0)
+                        {
+                            foreach (Potion potion in DataManager.Instance.LoveConsumableItems)
+                            {
+                                Console.WriteLine($"{number}. {potion.ToShow()}");
+                                number++;
+                            }
+                        }
+                        if(Bosscount != 0)
+                        {
+                            foreach (KillBossItem potion in DataManager.Instance.BossConsumableItems)
+                            {
+                                Console.WriteLine($"{number}. {potion.ToShow()}");
+                                number++;
+                            }
+                        }
+
+
+
+
                         Console.Write("번호 입력: ");
-                        if (int.TryParse(Console.ReadLine(), out choice) && choice >= 1 && choice <= usableItems.Count)
-                            break;
-                        Console.WriteLine("잘못된 입력입니다..");
+                        int choice = int.Parse(Console.ReadLine());
+
+                        if (choice == 0)
+                        {
+                            PlayerAction(monsters, player, mon, ref DeathCount);
+                            return;
+                        }
+                        else if (choice > 0 && choice <= hecount+manacount+lovecount+Bosscount)
+                        {
+                            if (choice > 0 && choice <= hecount)
+                            {
+                                DataManager.Instance.HealthConsumableItems[choice - 1].UsePotion();
+                                DataManager.Instance.HealthConsumableItems.RemoveAt(choice - 1);
+                                break;
+
+                            }
+                            else if(choice>hecount &&  choice <= manacount+ hecount)
+                            {
+                                DataManager.Instance.ManaConsumableItems[choice - hecount - 1].UsePotion();
+                                DataManager.Instance.ManaConsumableItems.RemoveAt(choice - hecount - 1);
+                                break;
+                            }
+                            else if(choice > hecount+manacount && choice <= hecount+manacount+lovecount)
+                            {
+                                DataManager.Instance.LoveConsumableItems[choice - manacount - hecount - 1].UsePotion();
+                                DataManager.Instance.LoveConsumableItems.RemoveAt(choice - manacount - hecount - 1);
+                                break;
+                            }
+                            else
+                            {
+                                if (monsters[0].MonsterHealth < monsters[0].MonsterHealth * (15.0 / 100) && Isboss)
+                                {
+                                    DataManager.Instance.BossConsumableItems[0].BossKill(monsters,ref DeathCount);
+                                }
+                                else
+                                {
+                                    Console.WriteLine("사용할 조건이 충족되지 않았습니다.");
+                                    PlayerAction(monsters, player, mon, ref DeathCount);
+                                    return;
+                                }
+                              
+                            }
+                        }
+                        else
+                        {
+                            Console.WriteLine("잘못된 입력입니다.");
+                        }
                     }
 
-                    
-                    Item selectedItem = usableItems[choice - 1];
 
-                    
-                    if (selectedItem is Potion potion)
-                    {
-                        potion.UsePotion();
-                    }
-                    else if (selectedItem is KillBossItem bossItem)
-                    {
-                        bossItem.UseKillBossItem(bossItem);
-                    }
 
-                    Instance.TakeAction();
+
+                    //while (true)
+                    //{
+                    //    bool Isboss = false;
+                    //    if (monsters[0] is Boss)
+                    //    {
+                    //        Isboss = true;
+                    //    }
+
+                    //    int number = 1;
+                    //    Console.Write("0. 돌아가기\n");
+                    //    foreach (var portion in DataManager.Instance.PortionDatas)
+                    //    {
+                    //        Console.WriteLine($"{number}. {portion.ShowPotion()}");
+                    //        number++;
+                    //    }
+                    //    if (DataManager.Instance.ConsumableItems.Any(d => d.Id == (int)Instance.Player.Job + 17) && DataManager.Instance.ConsumableItems != null)
+                    //    {
+
+                    //        Item selectedPotion = DataManager.Instance.ConsumableItems.FirstOrDefault(d => d.Id == (int)Instance.Player.Job + 17);
+                    //        Console.WriteLine($"{number}. {selectedPotion.Name} {selectedPotion.Desc}");
+                    //    }
+                    //    Console.Write("번호 입력: ");
+                    //    int choice = int.Parse(Console.ReadLine());
+
+                    //    if (choice == 0)
+                    //    {
+                    //        PlayerAction(monsters, player, mon, ref DeathCount);
+                    //        return;
+                    //    }
+                    //    var selectPortion = DataManager.Instance.PortionDatas[choice - 1];
+                    //    if (choice <= DataManager.Instance.PortionDatas.Count && choice >= 1)
+                    //    {
+                    //        selectPortion.UsePotion();
+                    //        break;
+                    //    }
+                    //    else if (choice == 4 && Isboss)
+                    //    {
+                    //        if (monsters[0].MonsterHealth < monsters[0].MonsterHealth * (15.0 / 100))
+                    //        {
+                    //            selectPortion.UsePotion();
+                    //        }
+                    //        else
+                    //        {
+                    //            Console.WriteLine("사용할 조건이 충족되지 않았습니다.");
+                    //            PlayerAction(monsters, player, mon, ref DeathCount);
+                    //            return;
+                    //        }
+                    //    }
+                    //    Instance.TakeAction();
+                    //    break;
+                    //}
+
                 }
                 else
                 {

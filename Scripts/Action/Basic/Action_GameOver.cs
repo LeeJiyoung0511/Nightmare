@@ -26,12 +26,16 @@
 
             protected override void DisPlay()
             {
-                Console.WriteLine("게임 오버!");
+                ASCIIManager.DisplayAlignASCIIArt("BadEnd", Align.Center, VerticalAlign.Top);
 
-                Console.WriteLine("\n1.다시하기");
-                Console.WriteLine("2.게임 종료");
+                var endTexts = new List<string>();
+                endTexts.Add("당신은 영원히 악몽속에 갇히게 되었습니다.");
+                endTexts.Add("1.다시하기");
+                endTexts.Add("2.게임 종료");
 
-                UtilityManager.InputNumberInRange(1, 2, ReStart, null, "원하시는 행동을 입력해주세요");
+                ASCIIManager.AlignText(endTexts.ToArray(), Align.Center, VerticalAlign.Bottom, 18);
+
+                UtilityManager.InputNumberInRange(1, 2, ReStart, null, "");
             }
 
             private void ReStart(int num)

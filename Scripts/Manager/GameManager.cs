@@ -130,7 +130,7 @@ namespace Nightmare
 
         // 이름 설정
         private void SetName()
-        {                                  
+        {
             Console.Clear();
             string nameMessage = "깜빡, 깜빡." +
                 "\n시계 토끼가 당신을 내려다 보고 있습니다" +
@@ -157,7 +157,7 @@ namespace Nightmare
                 Console.Write(c);
                 //Thread.Sleep(30);
             }
-           
+
             Console.WriteLine();
             Console.WriteLine();
 
@@ -172,8 +172,8 @@ namespace Nightmare
             }
             else
             {
-                SetName();               
-                
+                SetName();
+
             }
         }
 
@@ -276,11 +276,11 @@ namespace Nightmare
                         {
                             Boss.MonsterDefense -= howmany;
                         }
-                        else if(doco.Equals("회피력"))
+                        else if (doco.Equals("회피력"))
                         {
                             Boss.MissRate -= howmany;
                         }
-                        else if(doco.Equals("치명타율"))
+                        else if (doco.Equals("치명타율"))
                         {
                             Boss.Crtical -= howmany;
                         }
@@ -347,14 +347,15 @@ namespace Nightmare
                         {
                             Player.Stat.BaseDef += howmany;
                         }
-                        //else if (doco.Equals("회피율"))
-                        //{
-                        //    player.Avd.PlayerAvd -= howmany;
-                        //}
-                        //else if (doco.Equals("치명타율"))
-                        //{
-                        //    player.Crt.PlayerCrt -= howmany;
-                        //}
+                        else if (doco.Equals("회피율"))
+                        {
+                            player.Avd.PlayerAvd -= howmany;
+                        }
+                        else if (doco.Equals("치명타율"))
+                        {
+                            player.Crt.PlayerCrt -= howmany;
+                        }
+                 
                         Buffedplayer.RemoveAt(i);
                     }
                     else
@@ -369,7 +370,7 @@ namespace Nightmare
 
         }
         private Job JobChoice(int num)
-        {            
+        {
             var jobStats = new Dictionary<int, (Job job, float BaseAtk, int BaseDef, int Hp, int Mp, float Avd, float Crt)> {
             { 1, (Job.Dwarf,10,5,100,30,0.1f,0.15f) },
             { 2, (Job.NewSister, 15, 5, 70, 30, 0.1f, 0.15f) },
@@ -388,7 +389,7 @@ namespace Nightmare
                 Player.Crt.PlayerCrt = stats.Crt;
                 Player.QuestGroupId = num;
                 return stats.job;
-            }                       
+            }
 
             return Job.None;
         }

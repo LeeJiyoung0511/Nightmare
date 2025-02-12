@@ -25,6 +25,8 @@ namespace Nightmare
         public int Id { get; set; }
         public string? Name { get; set; }
         public ItemType Type { get; set; }
+        public int PotionCount { get; set; }
+        public int PotionMaxCount { get; set; }
 
         //Hp, Mp, Atk, Def, Avd, Crt를 하나의 변수로 묶어 아이템타입이 ~면 ~증가. 
         public float Value { get; set; }
@@ -34,6 +36,8 @@ namespace Nightmare
         public bool IsEquip { get; set; } = false;
 
         public bool IsSold { get; set; } = false;
+
+        public Action OnEquipEvent = delegate { };
 
         //무기인지 방어구인지에 따라 공격력이나 방어력을 출력
         public string GetTypeString()
@@ -95,10 +99,17 @@ namespace Nightmare
             return str;
         }
 
-        public String showItem()
+        public virtual String ToShow()
         {
-            string str = $"{Name} | {GetTypeString()} | {Desc} )";
-            return str;
+            String s = $"{Name}|{GetTypeString()}|{Desc}|{Type}";
+            return s;
+        }
+
+        public void BossKill(List<Monster> monsters, ref int Death)
+        {
+            monsters[0].MonsterHealth -= 999;
+            Death++;
+
         }
 
         public virtual void UseItem(Item item)
@@ -168,6 +179,7 @@ namespace Nightmare
                     GameManager.Instance.Player.Crt.EquipCrt += selectItem.Value;
                     break;
             }
+            OnEquipEvent();
         }
 
         public void UnEquip(Item item)
@@ -199,6 +211,8 @@ namespace Nightmare
                     GameManager.Instance.Player.Crt.EquipCrt -= item.Value;
                     break;
             }
+
+            OnEquipEvent();
         }
     }
 }

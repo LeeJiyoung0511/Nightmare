@@ -37,11 +37,10 @@
 
                 Console.WriteLine();
                 Console.WriteLine("[아이템 목록]");
-                int i = 1;
+                
                 foreach (Item item in DataManager.Instance.HaveItems)
                 {
-                    Console.WriteLine($" - {i}. {item.SelectItem()}");
-                    i++;
+                    Console.WriteLine($" - {item.SelectItem()}");
                 }
 
                 Console.WriteLine();
